@@ -12,15 +12,19 @@ LittleComputer::LittleComputer()
 
   programCounter = 0;
   accumulator = 0;
-};
+}
 
-//  LittleComputer::LittleComputer(int instructions[], int
-//  numberOfInstructions){
-//     for (int i = 0; i < 20; i++){
-//              memory[i] = instructions[i];
-//         }
-
-//  }
+LittleComputer::LittleComputer(int instructions[], int numberOfInstructions)
+{
+  for (int i = 0; i < 20; i++) {
+    memory[i] = instructions[i];
+  }
+  for (int i = numberOfInstructions; i < 20; i++) {
+    memory[i] = 0;
+  }
+  programCounter = 0;
+  accumulator = 0;
+}
 int LittleComputer::getProgramCounter()
 {
   return programCounter;
