@@ -59,10 +59,7 @@ void LittleComputer::step()
   //  programCounter++;
 }
 
-bool isHalted()
+bool LittleComputer::isHalted()
 {
   return false;
-}
-void restart()
-{
 }
