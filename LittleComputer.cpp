@@ -17,7 +17,7 @@ LittleComputer::LittleComputer()
 
 LittleComputer::LittleComputer(int instructions[], int numberOfInstructions)
 {
-  for (int i = 0; i <= numberOfInstructions; i++) {
+  for (int i = 0; i < numberOfInstructions; i++) {
     memory[i] = instructions[i];
   }
   for (int i = numberOfInstructions; i < 20; i++) {
@@ -58,52 +58,56 @@ void LittleComputer::restart()
 }
 
 // Asks the LittleComputer to run the current instruction
-void LittleComputer::step()
-{
-  //000
-  //HALT
-  if (getCurrentInstruction() ！= 0)
-    
-    //1
-    if ((getCurrentInstruction()/100)%10 == 1){
-    // add value from location i to the accumulator.
-    int i = getCurrentInstruction()-100;    //get current instruction
-    accumulator += getMemoryAt(i);      //and add its value to accumulator.
-    programCounter += 1;
-    }
+void LittleComputer::step() {
+  // Extracting the opcode and address from the current instruction
+  int instruction = getCurrentInstruction();
+  int opcode = instruction / 100;
+  int address = instruction % 100;
 
-    //2
-    if ((getCurrentInstruction()/100)%10 == 2){
-    // Sub value from location i to the accumulator.
-    int i = getCurrentInstruction()-200;     //get current instruction.
-    accumulator -= getMemoryAt(i);      //and add its value to accumulator.
-    programCounter += 1;}
-
-    //3
-    if ((getCurrentInstruction()/100)%10 == 3){
-    // Store at location i
-    int i = getCurrentInstruction()-300;     //get current instruction.
-    memory[i] = accumulator;  //store current accumulator value to instructed memory
-      programCounter += 1;}
-
-    //5
-    if ((getCurrentInstruction()/100)%10 == 5){
-    // Load from location i
-    int i = getCurrentInstruction()-500;     //get current instruction.
-    accumulator = getMemoryAt(i); // bring out the stored value to accumulator.
-    programCounter += 1;
+  // HALT
+  if (opcode == 0) {
+    // If it's a halt instruction, you may want to handle it here.
+    return;
+  }
+  //1
+  // Add value from location to the accumulator.
+  else if (opcode == 1) {
+    accumulator += getMemoryAt(address);
+    programCounter++;
+  }
+  //2
+  // Sub value from location from the accumulator.
+  else if (opcode == 2) {
+    accumulator -= getMemoryAt(address);
+    programCounter++;
+  }
+  //3
+  // Store accumulator in location.
+  else if (opcode == 3) {
+    memory[address] = accumulator;
+    programCounter++;
+  }
+  //5
+  // Load from location i to the accumulator.
+  else if (opcode == 5) {
+    accumulator = getMemoryAt(address);
+    programCounter++;
+  }
+  //6
+  // Branch always to the address.
+  else if (opcode == 6) {
+    programCounter = address;
+  }
+  //7
+  // Branch if accumulator is 0.
+  else if (opcode == 7) {
+    if (accumulator == 0) {
+      programCounter = address;
+    } else {
+      programCounter++;
     }
-    //6
-    if ((getCurrentInstruction()/100)%10 == 6){
-    // Branch always
-    int i = getCurrentInstruction()-600;     //get current instruction.
-    programCounter = getMemoryAt(i);  // changes the program counter to hold the value in XX. 
-    // The program counter does not increase by 1 after that.
-    }
-    //7 
-    if ((getCurrentInstruction()/100)%10 == 7){
-    // Branch if 0
-      //test 0
+  }
+
     int i = getCurrentInstruction() - 700;
       if(getMemoryAt(i)==0){
         programCounter = getMemoryAt(i); // branch
